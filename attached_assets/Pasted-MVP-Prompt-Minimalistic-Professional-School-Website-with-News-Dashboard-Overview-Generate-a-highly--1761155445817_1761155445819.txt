@@ -1,0 +1,456 @@
+MVP Prompt: Minimalistic Professional School Website with News Dashboard
+Overview
+Generate a highly professional, minimalistic, and interactive school website with an integrated news management dashboard. The design should be clean, modern, and focused on user experience with strategic use of whitespace and visual hierarchy.
+
+Core Requirements
+1. DESIGN PHILOSOPHY
+
+Minimalistic Approach: Clean layouts, generous whitespace, focused content
+Typography: Large, readable fonts; clear hierarchy (Hero: 48-72px, Headers: 32-40px, Body: 16-18px)
+Color Palette:
+
+Primary: School brand color (2-3 shades)
+Neutral: Grays for text and backgrounds
+Accent: One vibrant color for CTAs
+Maximum 4 colors total
+
+
+Animations: Subtle, purposeful micro-interactions (fade-ins, smooth scrolls, hover effects)
+Professional Standard: Match top-tier educational institutions
+
+
+2. WEBSITE STRUCTURE
+A. HERO SECTION
+Design: Full-screen, immersive, with gradient overlay
+
+Large, impactful headline (school name or tagline)
+Compelling subheadline (mission statement - 1 sentence)
+High-quality hero image/video (students in action, campus view)
+Prominent CTA buttons: "Apply Now" + "Virtual Tour"
+Scroll indicator animation
+
+B. QUICK STATS BAR
+Design: Horizontal strip below hero, dark background
+
+4 key metrics with icons:
+
+Years of Excellence
+Students Enrolled
+Programs Offered
+Graduate Success Rate
+
+
+Count-up animation on scroll
+
+C. ABOUT SECTION
+Design: Two-column layout with visual balance
+
+Left: Compelling paragraph (3-4 sentences) about school's unique value
+Right: High-quality image (students collaborating/facility)
+Mission & Vision in expandable cards or tabs
+Core values as icon grid (4-6 values)
+
+D. PROGRAMS/COURSES SECTION
+Design: Card-based grid layout (3 columns on desktop)
+
+Each course card includes:
+
+Program icon or representative image
+Course name
+Brief description (2 sentences)
+Duration badge
+"Learn More" link with arrow
+
+
+Hover effect: Card lifts, shadow increases
+Filter buttons for course categories (if applicable)
+
+E. NEWS & EVENTS SECTION ⭐ NEW
+Design: Dynamic, magazine-style layout
+
+Featured Story: Large card (left, 60% width)
+
+Full-width image
+Category badge
+Headline
+Excerpt (2 lines)
+Date and "Read More"
+
+
+Recent Posts: 3 smaller cards (right, stacked)
+
+Thumbnail image
+Headline
+Date
+Brief excerpt
+
+
+"View All News" button centered below
+Smooth loading animations
+
+F. FACILITIES & CAMPUS
+Design: Image gallery with interactive elements
+
+Photo grid (masonry or uniform)
+Lightbox functionality for full-screen viewing
+Category filters (Labs, Library, Sports, Dormitories)
+Optional: 360° virtual tour integration point
+
+G. ADMISSIONS
+Design: Step-by-step visual process
+
+Timeline/stepper component showing:
+
+Application submission
+Document verification
+Interview/assessment
+Acceptance & enrollment
+
+
+Requirements checklist with checkmark icons
+Download prospectus button
+Key dates in calendar format
+
+H. TESTIMONIALS
+Design: Carousel or 3-column grid
+
+Student/alumni photo (circular crop)
+Quote (2-3 sentences)
+Name, program, graduation year
+Star rating or endorsement badge
+Auto-rotating carousel with manual controls
+
+I. CONTACT & FOOTER
+Design: Split layout
+
+Left: Contact form (Name, Email, Phone, Message)
+Right:
+
+Interactive map embed
+Address with location icon
+Email with envelope icon
+Phone with phone icon
+
+
+Footer:
+
+Logo and brief mission
+Quick links (3 columns)
+Social media icons
+Copyright and credits
+
+
+
+
+3. NEWS MANAGEMENT DASHBOARD 🎯 CORE FEATURE
+A. DASHBOARD INTERFACE
+Design: Clean admin panel with sidebar navigation
+
+Authentication: Simple login page (username/password)
+Sidebar Menu:
+
+📊 Dashboard (overview)
+📰 News Posts
+📁 Media Library
+⚙️ Settings
+🚪 Logout
+
+
+
+B. NEWS POSTS MANAGEMENT
+Features:
+
+Post List View:
+
+Table/card grid showing all posts
+Columns: Thumbnail, Title, Category, Date, Status, Actions
+Search and filter options
+Bulk actions (delete, publish, draft)
+
+
+Create/Edit Post:
+
+Rich text editor for content
+Title input (required)
+Featured image upload (drag & drop)
+Category selection (dropdown or tags)
+Excerpt field (auto-generate or custom)
+Date picker (schedule publishing)
+Status toggle: Draft/Published
+SEO preview section
+Save and Publish buttons
+
+
+Post Categories:
+
+Predefined: Announcements, Events, Achievements, News
+Add custom categories
+Color coding for visual distinction
+
+
+
+C. MEDIA LIBRARY
+Features:
+
+Grid view of all uploaded images
+Upload button (multiple files, drag & drop)
+Image details sidebar (filename, size, upload date)
+Delete and select functions
+Search by filename
+
+D. DASHBOARD OVERVIEW
+Widgets:
+
+Total posts count
+Published vs. Draft ratio
+Recent activity feed
+Quick actions (New Post, Upload Image)
+
+
+4. TECHNICAL IMPLEMENTATION
+FRONTEND
+
+Framework: React with functional components and hooks
+Styling: Tailwind CSS (utility classes only - no custom CSS)
+State Management:
+
+React useState for local state
+React Context for dashboard authentication
+
+
+Storage: window.storage API for:
+
+News posts data (shared: true)
+Dashboard authentication state (shared: false)
+Media library references
+
+
+
+INTERACTIVE FEATURES
+
+Smooth scroll navigation
+Lazy loading images
+Skeleton loaders for news section
+Toast notifications (post published, saved, etc.)
+Modal dialogs for confirmations
+Responsive mobile menu
+Form validation with error messages
+
+DATA STRUCTURE
+javascript// News Post Object
+{
+  id: "post_timestamp",
+  title: "Post Title",
+  content: "Full HTML content from editor",
+  excerpt: "Brief summary...",
+  featuredImage: "base64_or_url",
+  category: "Announcements",
+  status: "published", // or "draft"
+  date: "2025-10-22",
+  author: "Admin"
+}
+
+// Storage Keys
+- "nvti_news_posts" (shared: true) - Array of post objects
+- "nvti_media" (shared: true) - Array of media objects
+- "nvti_dashboard_auth" (shared: false) - User session
+
+5. CONTENT REQUIREMENTS
+REALISTIC & AUTHENTIC
+
+Use actual school name, location, contact information
+Real mission, vision, core values
+Actual courses/programs offered
+Genuine admission requirements
+Authentic historical background
+
+PROFESSIONAL COPYWRITING
+
+Active voice, engaging tone
+SEO-friendly headlines
+Clear calls-to-action
+Benefit-focused descriptions
+Error-free grammar
+
+VISUAL ASSETS
+
+High-quality placeholder images from Unsplash API pattern:
+
+https://images.unsplash.com/photo-[id]?w=800&q=80
+
+
+Relevant categories: education, students, classroom, campus, graduation
+Consistent image dimensions per section
+Proper alt text for accessibility
+
+
+6. USER EXPERIENCE ENHANCEMENTS
+NAVIGATION
+
+Sticky header that changes on scroll
+Active section highlighting
+Mobile hamburger menu with smooth animation
+Breadcrumb navigation on inner pages
+
+PERFORMANCE
+
+Lazy load images below the fold
+Optimize image sizes
+Smooth transitions (0.3s ease)
+Loading states for dynamic content
+
+ACCESSIBILITY
+
+Semantic HTML5 tags
+ARIA labels where needed
+Keyboard navigation support
+Focus visible states
+Alt text for all images
+
+MOBILE RESPONSIVENESS
+
+Mobile-first approach
+Breakpoints: 640px (sm), 768px (md), 1024px (lg), 1280px (xl)
+Touch-friendly button sizes (min 44x44px)
+Simplified navigation for small screens
+
+
+7. DISTINGUISHING FEATURES (MAKE IT INTRIGUING)
+MICROINTERACTIONS
+
+Button hover effects (scale, color shift)
+Card hover lifts with shadow
+Smooth page transitions
+Scroll-triggered animations (fade-in, slide-up)
+Progress indicators
+
+VISUAL HIERARCHY
+
+Strategic use of whitespace (2-4rem between sections)
+Consistent padding and margins
+Clear focal points per section
+Contrast for emphasis
+
+TRUST SIGNALS
+
+Accreditation badges
+Partnership logos
+Success statistics
+Testimonial authenticity markers
+
+
+8. DASHBOARD USER FLOW
+ADMIN WORKFLOW
+
+Login → Dashboard Overview
+Click "News Posts" → View all posts
+Click "New Post" → Post editor opens
+Fill in title, content, select image, choose category
+Preview post
+Save as draft OR Publish immediately
+Post appears on website news section
+Edit/Delete from posts list at any time
+
+PUBLIC USER EXPERIENCE
+
+Visit website → See latest news in dedicated section
+Click featured story → Read full article
+Browse recent posts
+Click "View All News" → News archive page
+Filter by category
+Share on social media
+
+
+9. COLOR & TYPOGRAPHY RECOMMENDATIONS
+PROFESSIONAL SCHEMES
+Option 1 - Trust & Stability
+
+Primary: Navy Blue (#1E3A8A)
+Accent: Gold (#F59E0B)
+Background: Light Gray (#F9FAFB)
+Text: Charcoal (#1F2937)
+
+Option 2 - Modern & Fresh
+
+Primary: Teal (#0D9488)
+Accent: Coral (#F97316)
+Background: White (#FFFFFF)
+Text: Dark Gray (#111827)
+
+Option 3 - Creative & Bold
+
+Primary: Deep Purple (#7C3AED)
+Accent: Cyan (#06B6D4)
+Background: Off-White (#FAFAFA)
+Text: Black (#000000)
+
+TYPOGRAPHY
+
+Headings: Inter, Poppins, or Montserrat (bold, 600-700 weight)
+Body: Inter, Open Sans, or Roboto (regular, 400 weight)
+Line Height: 1.6 for body, 1.2 for headings
+
+
+10. SUCCESS METRICS
+A successful implementation will have:
+
+✅ Clean, uncluttered interface
+✅ Loading time < 3 seconds
+✅ Mobile responsive (all breakpoints)
+✅ Functional news dashboard with CRUD operations
+✅ Smooth animations (60fps)
+✅ Accessible (WCAG AA compliant)
+✅ Intuitive navigation
+✅ Professional visual design
+✅ Working contact form
+✅ Real content (no lorem ipsum)
+
+
+IMPLEMENTATION PROMPT
+Use this exact prompt with AI:
+"Create a minimalistic, highly professional school website with an integrated news management dashboard for [SCHOOL_NAME].
+School Details:
+
+Name: [School Name]
+Location: [City, Country]
+Email: [contact email]
+Courses: [list courses]
+Mission: [mission statement]
+Vision: [vision statement]
+History: [brief history]
+
+Requirements:
+
+Single React component with Tailwind CSS styling
+Minimalistic design with strategic whitespace
+Hero section with compelling imagery
+News & Events section displaying latest 4 posts
+Complete news dashboard with:
+
+Login page (default: admin/admin123)
+Post creation/editing with rich text
+Image upload and media library
+Category management
+Publish/Draft status
+
+
+Use window.storage API for data persistence
+High-quality placeholder images from Unsplash
+Smooth animations and microinteractions
+Fully responsive mobile design
+Professional color scheme matching school brand
+
+Include all sections: Hero, About, Programs, News, Facilities, Admissions, Testimonials, Contact. Make the design intriguing with modern UI trends while maintaining minimalism."
+
+NOTES
+
+Never use localStorage/sessionStorage (use window.storage API)
+All images must have alt text
+Forms must have validation
+Dashboard authentication is basic (for MVP)
+Focus on visual excellence and user experience
+Prioritize performance and accessibility
+Keep code clean and well-commented
+
+
+This MVP prompt ensures a production-ready, professional school website with powerful content management capabilities, all while maintaining a minimalistic and intriguing design philosophy.
