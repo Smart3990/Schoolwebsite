@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertNewsPostSchema, insertMediaSchema, insertContactSubmissionSchema } from "@shared/schema";
+import { insertNewsPostSchema, insertMediaSchema, insertContactSubmissionSchema, insertSiteSettingsSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -175,6 +175,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(submissions);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch contact submissions" });
+    }
+  });
+
+  // Site settings endpoints
+  app.get("/api/settings", async (req, res) => {
+    try {
+      const settings = await storage.getSiteSettings();
+      res.json(settings || {});
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch settings" });
+    }
+  });
+
+  app.put("/api/settings", async (req, res) => {
+    try {
+      const validatedData = insertSiteSettingsSchema.partial().parse(req.body);
+      const settings = await storage.updateSiteSettings(validatedData);
+      res.json(settings);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: "Invalid settings data", details: error.errors });
+      }
+      res.status(500).json({ error: "Failed to update settings" });
     }
   });
 

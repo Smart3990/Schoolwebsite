@@ -1,5 +1,5 @@
 import { db } from "./db";
-import { users, newsPosts } from "@shared/schema";
+import { users, newsPosts, siteSettings } from "@shared/schema";
 import { eq } from "drizzle-orm";
 
 async function seed() {
@@ -75,6 +75,30 @@ async function seed() {
     console.log(`✓ Created ${samplePosts.length} sample news posts`);
   } else {
     console.log(`✓ Database already has ${existingPosts.length} news posts`);
+  }
+
+  // Check if site settings exist
+  const existingSettings = await db.select().from(siteSettings).limit(1);
+
+  if (existingSettings.length === 0) {
+    console.log("Creating default site settings...");
+    
+    const defaultPlaceholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect width='800' height='600' fill='%23e5e7eb'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%239ca3af'%3EImage Placeholder%3C/text%3E%3C/svg%3E";
+    
+    await db.insert(siteSettings).values({
+      heroBannerImage: defaultPlaceholder,
+      aboutSectionImage: defaultPlaceholder,
+      galleryImage1: defaultPlaceholder,
+      galleryImage2: defaultPlaceholder,
+      galleryImage3: defaultPlaceholder,
+      galleryImage4: defaultPlaceholder,
+      galleryImage5: defaultPlaceholder,
+      galleryImage6: defaultPlaceholder,
+      updatedAt: new Date().toISOString(),
+    });
+    console.log("✓ Created default site settings with placeholders");
+  } else {
+    console.log("✓ Site settings already exist");
   }
 
   console.log("🎉 Database seeding complete!");

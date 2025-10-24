@@ -7,10 +7,13 @@ import {
   type InsertMedia,
   type ContactSubmission,
   type InsertContactSubmission,
+  type SiteSettings,
+  type InsertSiteSettings,
   users,
   newsPosts,
   media,
   contactSubmissions,
+  siteSettings,
 } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { db } from "./db";
@@ -38,6 +41,10 @@ export interface IStorage {
   // Contact submissions methods
   getAllContactSubmissions(): Promise<ContactSubmission[]>;
   createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission>;
+
+  // Site settings methods
+  getSiteSettings(): Promise<SiteSettings | undefined>;
+  updateSiteSettings(settings: Partial<InsertSiteSettings>): Promise<SiteSettings>;
 }
 
 export class MemStorage implements IStorage {
@@ -214,6 +221,15 @@ export class MemStorage implements IStorage {
     this.contactSubmissions.set(id, submission);
     return submission;
   }
+
+  // Site settings methods (not used in MemStorage, but required by interface)
+  async getSiteSettings(): Promise<SiteSettings | undefined> {
+    return undefined;
+  }
+
+  async updateSiteSettings(settings: Partial<InsertSiteSettings>): Promise<SiteSettings> {
+    throw new Error("Site settings not supported in MemStorage");
+  }
 }
 
 // Database-backed storage implementation (from javascript_database blueprint)
@@ -312,6 +328,40 @@ export class DatabaseStorage implements IStorage {
       .values(submission)
       .returning();
     return created;
+  }
+
+  // Site settings methods
+  async getSiteSettings(): Promise<SiteSettings | undefined> {
+    const [settings] = await db.select().from(siteSettings).limit(1);
+    return settings || undefined;
+  }
+
+  async updateSiteSettings(updates: Partial<InsertSiteSettings>): Promise<SiteSettings> {
+    // Get existing settings or create new one
+    const existing = await this.getSiteSettings();
+    
+    if (existing) {
+      // Update existing settings
+      const [updated] = await db
+        .update(siteSettings)
+        .set({
+          ...updates,
+          updatedAt: new Date().toISOString(),
+        })
+        .where(eq(siteSettings.id, existing.id))
+        .returning();
+      return updated;
+    } else {
+      // Create new settings
+      const [created] = await db
+        .insert(siteSettings)
+        .values({
+          ...updates,
+          updatedAt: new Date().toISOString(),
+        })
+        .returning();
+      return created;
+    }
   }
 }
 

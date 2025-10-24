@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import type { NewsPost } from "@shared/schema";
+import type { NewsPost, SiteSettings } from "@shared/schema";
 import {
   GraduationCap,
   Users,
@@ -59,6 +59,11 @@ export default function Home() {
   // Fetch news posts
   const { data: newsPosts = [], isLoading: newsLoading } = useQuery<NewsPost[]>({
     queryKey: ["/api/news"],
+  });
+
+  // Fetch site settings for images
+  const { data: siteSettings } = useQuery<SiteSettings>({
+    queryKey: ["/api/settings"],
   });
 
   // Contact form submission
@@ -282,7 +287,7 @@ export default function Home() {
       <section id="home" className="relative min-h-screen flex items-center justify-center">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${placeholderImage})` }}
+          style={{ backgroundImage: `url(${siteSettings?.heroBannerImage || placeholderImage})` }}
         />
         <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/80 to-primary/70" />
         
@@ -419,7 +424,7 @@ export default function Home() {
             <div className="relative">
               <div className="relative rounded-lg overflow-hidden shadow-xl">
                 <img
-                  src={placeholderImage}
+                  src={siteSettings?.aboutSectionImage || placeholderImage}
                   alt="Students collaborating at NVTI Kanda"
                   className="w-full h-auto"
                   data-testid="img-about"
@@ -617,12 +622,12 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              placeholderImage,
-              placeholderImage,
-              placeholderImage,
-              placeholderImage,
-              placeholderImage,
-              placeholderImage,
+              siteSettings?.galleryImage1 || placeholderImage,
+              siteSettings?.galleryImage2 || placeholderImage,
+              siteSettings?.galleryImage3 || placeholderImage,
+              siteSettings?.galleryImage4 || placeholderImage,
+              siteSettings?.galleryImage5 || placeholderImage,
+              siteSettings?.galleryImage6 || placeholderImage,
             ].map((image, index) => (
               <div
                 key={index}

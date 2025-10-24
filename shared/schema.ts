@@ -71,3 +71,25 @@ export const insertUserSchema = createInsertSchema(users).pick({
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
+
+// Site Settings Schema (for managing placeholder images and site configuration)
+export const siteSettings = pgTable("site_settings", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  heroBannerImage: text("hero_banner_image"),
+  aboutSectionImage: text("about_section_image"),
+  galleryImage1: text("gallery_image_1"),
+  galleryImage2: text("gallery_image_2"),
+  galleryImage3: text("gallery_image_3"),
+  galleryImage4: text("gallery_image_4"),
+  galleryImage5: text("gallery_image_5"),
+  galleryImage6: text("gallery_image_6"),
+  updatedAt: text("updated_at").notNull(),
+});
+
+export const insertSiteSettingsSchema = createInsertSchema(siteSettings).omit({
+  id: true,
+  updatedAt: true,
+});
+
+export type InsertSiteSettings = z.infer<typeof insertSiteSettingsSchema>;
+export type SiteSettings = typeof siteSettings.$inferSelect;
