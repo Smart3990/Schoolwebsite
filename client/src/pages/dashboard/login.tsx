@@ -27,7 +27,10 @@ export default function Login() {
           title: "Login Successful",
           description: "Welcome to the NVTI Kanda Dashboard",
         });
-        setLocation("/dashboard");
+        // Use setTimeout to ensure localStorage is set before navigation
+        setTimeout(() => {
+          window.location.href = "/dashboard";
+        }, 100);
       }
     },
     onError: () => {

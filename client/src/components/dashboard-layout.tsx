@@ -30,7 +30,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const handleLogout = () => {
     localStorage.removeItem("dashboard_auth");
-    setLocation("/dashboard/login");
+    localStorage.removeItem("dashboard_user");
+    window.location.href = "/dashboard/login";
   };
 
   const menuItems = [
