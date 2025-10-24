@@ -7,8 +7,14 @@ import {
   type InsertMedia,
   type ContactSubmission,
   type InsertContactSubmission,
+  users,
+  newsPosts,
+  media,
+  contactSubmissions,
 } from "@shared/schema";
 import { randomUUID } from "crypto";
+import { db } from "./db";
+import { eq, desc } from "drizzle-orm";
 
 export interface IStorage {
   // User methods
@@ -210,4 +216,103 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Database-backed storage implementation (from javascript_database blueprint)
+export class DatabaseStorage implements IStorage {
+  // User methods
+  async getUser(id: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
+    return user;
+  }
+
+  // News posts methods
+  async getAllNewsPosts(): Promise<NewsPost[]> {
+    return await db.select().from(newsPosts).orderBy(desc(newsPosts.date));
+  }
+
+  async getNewsPost(id: string): Promise<NewsPost | undefined> {
+    const [post] = await db.select().from(newsPosts).where(eq(newsPosts.id, id));
+    return post || undefined;
+  }
+
+  async createNewsPost(insertPost: InsertNewsPost): Promise<NewsPost> {
+    const [post] = await db
+      .insert(newsPosts)
+      .values(insertPost)
+      .returning();
+    return post;
+  }
+
+  async updateNewsPost(
+    id: string,
+    updates: Partial<InsertNewsPost>
+  ): Promise<NewsPost | undefined> {
+    const [updated] = await db
+      .update(newsPosts)
+      .set(updates)
+      .where(eq(newsPosts.id, id))
+      .returning();
+    return updated || undefined;
+  }
+
+  async deleteNewsPost(id: string): Promise<boolean> {
+    const result = await db.delete(newsPosts).where(eq(newsPosts.id, id));
+    return result.rowCount !== null && result.rowCount > 0;
+  }
+
+  // Media methods
+  async getAllMedia(): Promise<Media[]> {
+    return await db.select().from(media).orderBy(desc(media.uploadDate));
+  }
+
+  async getMedia(id: string): Promise<Media | undefined> {
+    const [item] = await db.select().from(media).where(eq(media.id, id));
+    return item || undefined;
+  }
+
+  async createMedia(insertMedia: InsertMedia): Promise<Media> {
+    const [mediaItem] = await db
+      .insert(media)
+      .values(insertMedia)
+      .returning();
+    return mediaItem;
+  }
+
+  async deleteMedia(id: string): Promise<boolean> {
+    const result = await db.delete(media).where(eq(media.id, id));
+    return result.rowCount !== null && result.rowCount > 0;
+  }
+
+  // Contact submissions methods
+  async getAllContactSubmissions(): Promise<ContactSubmission[]> {
+    return await db.select().from(contactSubmissions).orderBy(desc(contactSubmissions.submittedAt));
+  }
+
+  async createContactSubmission(
+    insertSubmission: InsertContactSubmission
+  ): Promise<ContactSubmission> {
+    const submission = {
+      ...insertSubmission,
+      submittedAt: new Date().toISOString(),
+    };
+    const [created] = await db
+      .insert(contactSubmissions)
+      .values(submission)
+      .returning();
+    return created;
+  }
+}
+
+export const storage = new DatabaseStorage();
