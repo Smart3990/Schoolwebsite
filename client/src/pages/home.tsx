@@ -497,7 +497,12 @@ export default function Home() {
                       <Clock className="h-3 w-3 mr-1" />
                       {program.duration}
                     </Badge>
-                    <Button variant="ghost" size="sm" className="text-primary hover-elevate">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-primary hover-elevate"
+                      onClick={() => scrollToSection("admissions")}
+                    >
                       Learn More
                       <ChevronRight className="ml-1 h-4 w-4" />
                     </Button>
@@ -549,10 +554,6 @@ export default function Home() {
                         <Calendar className="h-4 w-4" />
                         {new Date(newsPosts[0].date).toLocaleDateString()}
                       </span>
-                      <Button variant="ghost" className="text-primary hover-elevate">
-                        Read More
-                        <ChevronRight className="ml-1 h-4 w-4" />
-                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -570,14 +571,11 @@ export default function Home() {
                         {news.category}
                       </Badge>
                       <h4 className="font-semibold mb-2 leading-tight">{news.title}</h4>
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-start">
                         <span className="text-xs text-muted-foreground flex items-center gap-1">
                           <Calendar className="h-3 w-3" />
                           {new Date(news.date).toLocaleDateString()}
                         </span>
-                        <Button variant="ghost" size="sm" className="text-primary hover-elevate h-auto p-0">
-                          <ChevronRight className="h-4 w-4" />
-                        </Button>
                       </div>
                     </CardContent>
                   </Card>
@@ -591,7 +589,13 @@ export default function Home() {
           )}
 
           <div className="text-center mt-12">
-            <Button variant="outline" size="lg" className="hover-elevate" data-testid="button-view-all-news">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="hover-elevate" 
+              data-testid="button-view-all-news"
+              onClick={() => scrollToSection("news")}
+            >
               View All News
               <ChevronRight className="ml-2 h-5 w-5" />
             </Button>

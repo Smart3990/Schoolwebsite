@@ -105,9 +105,6 @@ export default function Login() {
                   "Login"
                 )}
               </Button>
-              <div className="text-sm text-center text-muted-foreground">
-                Default: admin / admin123
-              </div>
             </form>
           </CardContent>
         </Card>
