@@ -35,9 +35,9 @@ import {
   Loader2,
 } from "lucide-react";
 import logoImage from "@assets/logo_1761155635320.jpg";
-import heroImage from "@assets/generated_images/NVTI_Kanda_hero_background_60c09515.png";
-import aboutImage from "@assets/generated_images/Students_collaboration_about_section_4bc17120.png";
-import facilitiesImage from "@assets/generated_images/Campus_facilities_exterior_131cf436.png";
+
+// Placeholder images - these can be updated from the dashboard
+const placeholderImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect width='800' height='600' fill='%23e5e7eb'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%239ca3af'%3EImage Placeholder%3C/text%3E%3C/svg%3E";
 
 export default function Home() {
   const { toast } = useToast();
@@ -282,7 +282,7 @@ export default function Home() {
       <section id="home" className="relative min-h-screen flex items-center justify-center">
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroImage})` }}
+          style={{ backgroundImage: `url(${placeholderImage})` }}
         />
         <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/80 to-primary/70" />
         
@@ -364,16 +364,7 @@ export default function Home() {
               </h2>
               <div className="text-lg text-muted-foreground space-y-4 leading-relaxed">
                 <p>
-                  Kanda Career Training Institute was built by the 31st December Women's Movement with
-                  the assistance of Send School of the World (SESCO), a Japanese Non-Governmental
-                  Organization (NGO). The institute was later transferred to the National Vocational
-                  Training Institute in 1999 to equip, staff, and provide quality vocational education.
-                </p>
-                <p>
-                  We are committed to empowering our students with practical skills, knowledge, and
-                  hands-on experience that prepares them for successful careers in their chosen fields.
-                  Our modern facilities and experienced instructors ensure the highest quality of
-                  vocational training.
+                  Kanda Career Training Institute was built by the 31st December Women's Movement with the assistance of Send School of the World (SESCO) a Japanese Non Governmental Organization (NGO). The 31st Women's Movement led by the then First Lady Nana Konadu Agyemang Rawlings then gave the Institute to the National Vocational Training Institute later part of 1999 to equip, staff and run as any other Vocational Institute under the Ministry of Employment and Social Welfare.
                 </p>
               </div>
 
@@ -428,7 +419,7 @@ export default function Home() {
             <div className="relative">
               <div className="relative rounded-lg overflow-hidden shadow-xl">
                 <img
-                  src={aboutImage}
+                  src={placeholderImage}
                   alt="Students collaborating at NVTI Kanda"
                   className="w-full h-auto"
                   data-testid="img-about"
@@ -622,12 +613,12 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              facilitiesImage,
-              aboutImage,
-              heroImage,
-              facilitiesImage,
-              aboutImage,
-              heroImage,
+              placeholderImage,
+              placeholderImage,
+              placeholderImage,
+              placeholderImage,
+              placeholderImage,
+              placeholderImage,
             ].map((image, index) => (
               <div
                 key={index}
