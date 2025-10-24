@@ -19,7 +19,7 @@ export default function Login() {
     mutationFn: async (credentials: { username: string; password: string }) => {
       return await apiRequest("POST", "/api/auth/login", credentials);
     },
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       if (data.success) {
         localStorage.setItem("dashboard_auth", "true");
         localStorage.setItem("dashboard_user", JSON.stringify(data.user));

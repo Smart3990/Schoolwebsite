@@ -92,7 +92,7 @@ export default function Home() {
 
   useEffect(() => {
     const duration = 2000;
-    const targets = { years: 25, students: 1200, programs: 12, successRate: 95 };
+    const targets = { years: 25, students: 1200, programs: 5, successRate: 95 };
     const start = Date.now();
 
     const animate = () => {
@@ -383,8 +383,7 @@ export default function Home() {
                     <Target className="h-8 w-8 text-primary mb-3" />
                     <h3 className="font-semibold text-lg mb-2">Our Mission</h3>
                     <p className="text-sm text-muted-foreground">
-                      To provide quality vocational training that empowers students with practical
-                      skills for the job market.
+                      To provide demand-driven employable skills and enhance generating capacities of basic and secondary school leavers, and such other persons through Competency Based Training (CBT) Apprenticeship, Testing and Career Development.
                     </p>
                   </CardContent>
                 </Card>
@@ -393,8 +392,7 @@ export default function Home() {
                     <Award className="h-8 w-8 text-primary mb-3" />
                     <h3 className="font-semibold text-lg mb-2">Our Vision</h3>
                     <p className="text-sm text-muted-foreground">
-                      To be the leading vocational training institute in Ghana, recognized for
-                      excellence and innovation.
+                      We will provide the best system of employable TVET skills
                     </p>
                   </CardContent>
                 </Card>
@@ -405,27 +403,23 @@ export default function Home() {
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   <div className="flex items-center gap-2" data-testid="value-excellence">
                     <div className="h-2 w-2 rounded-full bg-chart-2" />
-                    <span className="text-sm font-medium">Excellence</span>
-                  </div>
-                  <div className="flex items-center gap-2" data-testid="value-integrity">
-                    <div className="h-2 w-2 rounded-full bg-chart-2" />
-                    <span className="text-sm font-medium">Integrity</span>
-                  </div>
-                  <div className="flex items-center gap-2" data-testid="value-innovation">
-                    <div className="h-2 w-2 rounded-full bg-chart-2" />
-                    <span className="text-sm font-medium">Innovation</span>
+                    <span className="text-sm font-medium">Pursuit of Excellence</span>
                   </div>
                   <div className="flex items-center gap-2" data-testid="value-teamwork">
                     <div className="h-2 w-2 rounded-full bg-chart-2" />
-                    <span className="text-sm font-medium">Teamwork</span>
+                    <span className="text-sm font-medium">Team work</span>
                   </div>
                   <div className="flex items-center gap-2" data-testid="value-respect">
                     <div className="h-2 w-2 rounded-full bg-chart-2" />
-                    <span className="text-sm font-medium">Respect</span>
+                    <span className="text-sm font-medium">Respect for all</span>
                   </div>
-                  <div className="flex items-center gap-2" data-testid="value-dedication">
+                  <div className="flex items-center gap-2" data-testid="value-integrity">
                     <div className="h-2 w-2 rounded-full bg-chart-2" />
-                    <span className="text-sm font-medium">Dedication</span>
+                    <span className="text-sm font-medium">Truth, honesty and integrity</span>
+                  </div>
+                  <div className="flex items-center gap-2" data-testid="value-cost">
+                    <div className="h-2 w-2 rounded-full bg-chart-2" />
+                    <span className="text-sm font-medium">Cost effectiveness</span>
                   </div>
                 </div>
               </div>
@@ -461,46 +455,39 @@ export default function Home() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                title: "Electrical Installation",
+                title: "Catering/Cookery",
                 description:
-                  "Master electrical systems, wiring, and installation techniques with hands-on training in modern facilities.",
-                duration: "12 Months",
-                icon: Lightbulb,
+                  "Learn professional cooking techniques, food preparation, and catering services with hands-on training in our modern kitchen facilities.",
+                duration: "3-4 Years",
+                icon: Heart,
               },
               {
-                title: "Plumbing & Pipe Fitting",
+                title: "Fashion Designing/Dressmaking",
                 description:
-                  "Learn plumbing systems, pipe installation, and maintenance from experienced professionals.",
-                duration: "9 Months",
-                icon: Target,
-              },
-              {
-                title: "Welding & Metal Fabrication",
-                description:
-                  "Develop expertise in various welding techniques and metal fabrication processes.",
-                duration: "12 Months",
+                  "Master garment construction, pattern making, and fashion design with comprehensive training in textile and apparel production.",
+                duration: "3-4 Years",
                 icon: Award,
               },
               {
-                title: "Carpentry & Joinery",
+                title: "Cake Decoration",
                 description:
-                  "Build practical carpentry skills including furniture making, woodworking, and construction.",
-                duration: "10 Months",
-                icon: GraduationCap,
+                  "Develop expertise in cake design, decorating techniques, and pastry arts to create beautiful and delicious creations.",
+                duration: "3-4 Years",
+                icon: Lightbulb,
               },
               {
-                title: "Automotive Mechanics",
+                title: "Interior Decoration",
                 description:
-                  "Gain comprehensive knowledge of vehicle maintenance, repair, and diagnostics.",
-                duration: "12 Months",
+                  "Learn space planning, color coordination, and design principles to transform living and working spaces.",
+                duration: "3-4 Years",
+                icon: Target,
+              },
+              {
+                title: "ICT (Information and Communication Technology)",
+                description:
+                  "Gain comprehensive knowledge in computer operations, software applications, and digital communication technologies.",
+                duration: "3-4 Years",
                 icon: BookOpen,
-              },
-              {
-                title: "Fashion & Design",
-                description:
-                  "Explore creative design, pattern making, and garment construction techniques.",
-                duration: "8 Months",
-                icon: Heart,
               },
             ].map((program, index) => (
               <Card
@@ -727,14 +714,14 @@ export default function Home() {
 
           <Card className="max-w-2xl mx-auto">
             <CardContent className="p-8">
-              <h3 className="text-2xl font-semibold mb-6">Requirements</h3>
+              <h3 className="text-2xl font-semibold mb-6">Admission Requirements</h3>
+              <p className="text-muted-foreground mb-6">Entry into our School Based Apprenticeship Training is open to persons with the following qualifications:</p>
               <div className="space-y-3">
                 {[
-                  "Completed application form",
-                  "BECE certificate or equivalent",
-                  "Birth certificate",
-                  "Two passport-size photographs",
-                  "Recommendation letter (optional)",
+                  "Basic Education Certificate Examinations (BECE) with passes in Mathematics, English Language and General Science",
+                  "Middle School Leaving Certificate",
+                  "Sponsored apprentices with basic educational background",
+                  "Evidence of at least two (2) years Senior High School / SSS",
                 ].map((requirement, index) => (
                   <div key={index} className="flex items-start gap-3" data-testid={`requirement-${index}`}>
                     <CheckCircle2 className="h-5 w-5 text-chart-3 mt-0.5 flex-shrink-0" />
@@ -742,16 +729,87 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <Button className="w-full mt-6 hover-elevate active-elevate-2" size="lg" data-testid="button-download-prospectus">
-                Download Prospectus
-              </Button>
+              
+              <h4 className="text-xl font-semibold mt-8 mb-4">Admission Procedures</h4>
+              <div className="space-y-3">
+                {[
+                  "Purchase Admission Forms from the centre (All year round)",
+                  "Complete the application Form and return to the centre",
+                  "Attend selection interview and counseling",
+                  "Upon successful selection, pay the requisite Fees",
+                  "Register in your Department and other designated Departments",
+                ].map((step, index) => (
+                  <div key={index} className="flex items-start gap-3">
+                    <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-xs font-semibold text-primary">{index + 1}</span>
+                    </div>
+                    <span className="text-muted-foreground">{step}</span>
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
         </div>
       </section>
 
+      {/* Examinations Section */}
+      <section id="examinations" className="py-24 bg-muted/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
+              Examinations & Certification
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Trainees are eligible to sit for the following test Grades during and after the 3/4 years training
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            {[
+              {
+                title: "Foundation Certificate",
+                description: "At the end of the 2nd Year",
+                icon: BookOpen,
+              },
+              {
+                title: "Certificate I",
+                description: "At the end of the 3rd Year",
+                icon: Award,
+              },
+              {
+                title: "Certificate II",
+                description: "At the end of the 4th Year",
+                icon: GraduationCap,
+              },
+              {
+                title: "Proficiency I",
+                description: "At the end of 2nd Year",
+                icon: Target,
+              },
+              {
+                title: "Proficiency II",
+                description: "At the end of 3rd Year",
+                icon: CheckCircle2,
+              },
+            ].map((exam, index) => (
+              <Card
+                key={index}
+                className="hover-elevate transition-all duration-300 hover:-translate-y-2"
+                data-testid={`card-exam-${index}`}
+              >
+                <CardContent className="p-6 text-center">
+                  <exam.icon className="h-12 w-12 text-primary mb-4 mx-auto" />
+                  <h3 className="text-xl font-semibold mb-2">{exam.title}</h3>
+                  <p className="text-muted-foreground text-sm">{exam.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials Section */}
-      <section id="testimonials" className="py-24 bg-muted/30">
+      <section id="testimonials" className="py-24 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
@@ -765,25 +823,25 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                name: "Kwame Mensah",
-                program: "Electrical Installation",
-                year: "Class of 2023",
-                quote:
-                  "The hands-on training I received at NVTI Kanda equipped me with the skills I needed to excel in my career. I'm now working as a certified electrician and I'm grateful for the quality education.",
-              },
-              {
                 name: "Abena Osei",
-                program: "Fashion & Design",
-                year: "Class of 2022",
+                program: "Fashion Designing/Dressmaking",
+                year: "Class of 2023",
                 quote:
                   "NVTI Kanda gave me the foundation to start my own fashion business. The instructors were supportive and the facilities were excellent. I highly recommend this institute.",
               },
               {
-                name: "Kofi Agyeman",
-                program: "Automotive Mechanics",
+                name: "Kwame Mensah",
+                program: "Catering/Cookery",
+                year: "Class of 2022",
+                quote:
+                  "The hands-on training I received at NVTI Kanda equipped me with the culinary skills I needed to excel in my career. I now run my own catering business and I'm grateful for the quality education.",
+              },
+              {
+                name: "Akosua Agyeman",
+                program: "ICT",
                 year: "Class of 2023",
                 quote:
-                  "The practical approach to learning at NVTI Kanda made all the difference. I graduated confident and job-ready, and I landed my dream job within weeks of completing the program.",
+                  "The practical approach to learning at NVTI Kanda made all the difference. I graduated confident and job-ready, and I landed my dream job in IT within weeks of completing the program.",
               },
             ].map((testimonial, index) => (
               <Card key={index} className="hover-elevate transition-all duration-300" data-testid={`card-testimonial-${index}`}>
@@ -1010,10 +1068,11 @@ export default function Home() {
             <div>
               <h3 className="font-semibold mb-4">Programs</h3>
               <div className="space-y-2 text-white/80 text-sm">
-                <div>Electrical Installation</div>
-                <div>Plumbing & Pipe Fitting</div>
-                <div>Welding & Fabrication</div>
-                <div>Automotive Mechanics</div>
+                <div>Catering/Cookery</div>
+                <div>Fashion Designing/Dressmaking</div>
+                <div>Cake Decoration</div>
+                <div>Interior Decoration</div>
+                <div>ICT</div>
               </div>
             </div>
 

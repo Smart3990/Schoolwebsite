@@ -138,7 +138,13 @@ export class MemStorage implements IStorage {
 
   async createNewsPost(insertPost: InsertNewsPost): Promise<NewsPost> {
     const id = randomUUID();
-    const post: NewsPost = { ...insertPost, id };
+    const post: NewsPost = { 
+      ...insertPost, 
+      id,
+      featuredImage: insertPost.featuredImage ?? null,
+      status: insertPost.status ?? "draft",
+      author: insertPost.author ?? "Admin",
+    };
     this.newsPosts.set(id, post);
     return post;
   }
@@ -196,6 +202,7 @@ export class MemStorage implements IStorage {
     const submission: ContactSubmission = {
       ...insertSubmission,
       id,
+      phone: insertSubmission.phone ?? null,
       submittedAt: new Date().toISOString(),
     };
     this.contactSubmissions.set(id, submission);
