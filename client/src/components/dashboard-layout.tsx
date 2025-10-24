@@ -26,7 +26,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     if (!isAuth) {
       setLocation("/dashboard/login");
     }
-  }, [setLocation]);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("dashboard_auth");
