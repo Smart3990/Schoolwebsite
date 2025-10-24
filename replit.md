@@ -51,16 +51,18 @@ Preferred communication style: Simple, everyday language.
 - Response logging middleware for request tracking
 
 **Data Storage Strategy**:
-- In-memory storage implementation (`MemStorage` class)
-- Interface-based storage layer (`IStorage`) allowing future database migration
-- Drizzle ORM schemas defined but not actively used (PostgreSQL ready)
-- Default admin user created on initialization
+- **PostgreSQL Database**: Using Replit's built-in PostgreSQL (Neon-backed) for persistent data storage
+- **Drizzle ORM**: Type-safe database toolkit with schema-first approach
+- Interface-based storage layer (`IStorage`) with `DatabaseStorage` implementation
+- Automatic database seeding with default admin user and sample content
+- Database migrations handled via `npm run db:push` command
 
 **Storage Collections**:
 - Users (authentication)
 - News Posts (content management)
 - Media (file uploads)
 - Contact Submissions (form data)
+- Site Settings (image placeholders and configuration)
 
 ### Data Schemas
 
@@ -79,6 +81,11 @@ Preferred communication style: Simple, everyday language.
 **Users**:
 - Fields: id, username, password
 - Simple authentication system
+
+**Site Settings**:
+- Fields: id, heroBannerImage, aboutSectionImage, galleryImage1-6, updatedAt
+- Manages website image placeholders
+- Allows updating images from dashboard settings page
 
 ### Authentication & Authorization
 
@@ -110,6 +117,12 @@ Preferred communication style: Simple, everyday language.
 - Shared schema definitions between frontend and backend
 - Type-safe API contracts using TypeScript and Zod
 
+**Database Management**:
+- Schema defined in `shared/schema.ts` using Drizzle ORM
+- Database connection in `server/db.ts` using Neon serverless driver
+- Seed script at `server/seed.ts` for initializing database
+- Migration command: `npm run db:push` (pushes schema changes without manual SQL migrations)
+
 ## External Dependencies
 
 ### Core Framework Dependencies
@@ -132,8 +145,9 @@ Preferred communication style: Simple, everyday language.
 
 ### Database
 - **@neondatabase/serverless**: PostgreSQL driver for Neon serverless database
+- **Drizzle ORM**: Type-safe ORM for database operations
 - **Drizzle Kit**: Migration tool for database schema changes
-- Note: Database configured but storage currently uses in-memory implementation
+- **PostgreSQL**: Replit's built-in PostgreSQL database (free tier available via usage-based pricing)
 
 ### Utilities
 - **date-fns**: Date manipulation and formatting
@@ -147,7 +161,8 @@ Preferred communication style: Simple, everyday language.
 - **esbuild**: Fast JavaScript bundler for production builds
 
 ### Notable Configuration
-- PostgreSQL database configured via Drizzle but not actively connected
-- Migration files would be generated in `/migrations` directory
-- Environment variable `DATABASE_URL` expected but storage layer uses memory implementation
-- Future migration path available through IStorage interface implementation
+- PostgreSQL database fully configured and connected
+- Environment variables automatically provided by Replit: `DATABASE_URL`, `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`
+- Database schema pushed using Drizzle Kit (no manual migration files)
+- Storage layer uses `DatabaseStorage` for persistent data
+- Database seeded on first run with default admin credentials (username: admin, password: admin123)
