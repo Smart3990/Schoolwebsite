@@ -9,6 +9,23 @@ The project serves three purposes:
 2. **Admin Dashboard**: Full-featured React-based content management system for news posts, media library, and site settings
 3. **Standalone HTML Editor**: Simple HTML/CSS interface for easy content updates without requiring technical knowledge (accessible at `/editor`)
 
+## Recent Changes
+
+**October 24, 2025:**
+- Added password change functionality to both interfaces:
+  - Dashboard settings page includes secure password change form with proper error handling
+  - HTML editor settings tab includes password change section
+  - Backend API validates old password before allowing changes
+  - Proper validation for password length (minimum 6 characters) and match confirmation
+  - Username stored in localStorage for both interfaces to support password changes
+  - Updated EDITOR_GUIDE.md with comprehensive password change instructions
+
+**Previous Updates:**
+- Migrated from in-memory storage to PostgreSQL database with full data persistence across server restarts
+- Fixed critical dashboard login bug (apiRequest JSON parsing issue)
+- Implemented comprehensive site settings system managing 8 image placeholders (hero banner, about section, 6 gallery images)
+- Created standalone HTML editor (`/editor`) with login, news CRUD operations, and image management
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
