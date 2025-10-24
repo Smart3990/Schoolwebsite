@@ -23,10 +23,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   useEffect(() => {
     // Check authentication
     const isAuth = localStorage.getItem("dashboard_auth");
-    if (!isAuth) {
-      setLocation("/dashboard/login");
+    console.log("Dashboard auth check:", isAuth);
+    if (!isAuth || isAuth !== "true") {
+      console.log("Not authenticated, redirecting to login");
+      window.location.href = "/dashboard/login";
     }
-  }, []);
+  }, [setLocation]);
 
   const handleLogout = () => {
     localStorage.removeItem("dashboard_auth");

@@ -17,23 +17,30 @@ export default function Login() {
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: { username: string; password: string }) => {
-      return await apiRequest("POST", "/api/auth/login", credentials);
+      console.log("Login attempt:", credentials.username);
+      const response = await apiRequest("POST", "/api/auth/login", credentials);
+      return await response.json();
     },
     onSuccess: (data: any) => {
+      console.log("Login response:", data);
       if (data.success) {
+        console.log("Setting localStorage and redirecting...");
         localStorage.setItem("dashboard_auth", "true");
         localStorage.setItem("dashboard_user", JSON.stringify(data.user));
+        console.log("localStorage set:", localStorage.getItem("dashboard_auth"));
         toast({
           title: "Login Successful",
           description: "Welcome to the NVTI Kanda Dashboard",
         });
         // Use setTimeout to ensure localStorage is set before navigation
         setTimeout(() => {
+          console.log("Redirecting to dashboard...");
           window.location.href = "/dashboard";
         }, 100);
       }
     },
-    onError: () => {
+    onError: (error: any) => {
+      console.error("Login error:", error);
       toast({
         title: "Login Failed",
         description: "Invalid username or password",
