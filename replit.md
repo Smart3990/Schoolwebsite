@@ -2,11 +2,12 @@
 
 ## Overview
 
-A professional, minimalistic website for National Vocational Training Institute (NVTI) Kanda, featuring a public-facing educational website and an integrated news management dashboard. Built with React, Express, and TypeScript, the application provides a modern web presence for the vocational training institute while enabling staff to manage news content through an administrative interface.
+A professional, minimalistic website for National Vocational Training Institute (NVTI) Kanda, featuring a public-facing educational website and an integrated news management dashboard. Built with React, Express, and TypeScript, the application provides a modern web presence for the vocational training institute while enabling staff to manage news content through multiple administrative interfaces.
 
-The project serves a dual purpose:
+The project serves three purposes:
 1. **Public Website**: Showcasing the institute's programs, mission, and facilities with a clean, educational aesthetic
-2. **Admin Dashboard**: Content management system for news posts, media library, and site settings
+2. **Admin Dashboard**: Full-featured React-based content management system for news posts, media library, and site settings
+3. **Standalone HTML Editor**: Simple HTML/CSS interface for easy content updates without requiring technical knowledge (accessible at `/editor`)
 
 ## User Preferences
 

@@ -3,9 +3,35 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertNewsPostSchema, insertMediaSchema, insertContactSubmissionSchema, insertSiteSettingsSchema } from "@shared/schema";
 import { z } from "zod";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Authentication endpoint
+  // Serve the standalone HTML editor
+  app.get("/editor", (req, res) => {
+    res.sendFile(path.join(__dirname, "..", "editor.html"));
+  });
+
+  // Authentication endpoints
+  app.post("/api/login", async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      
+      const user = await storage.getUserByUsername(username);
+      
+      if (!user || user.password !== password) {
+        return res.status(401).json({ success: false, error: "Invalid credentials" });
+      }
+      
+      res.json({ success: true, user: { id: user.id, username: user.username } });
+    } catch (error) {
+      res.status(500).json({ success: false, error: "Login failed" });
+    }
+  });
+
   app.post("/api/auth/login", async (req, res) => {
     try {
       const { username, password } = req.body;

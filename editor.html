@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NVTI Kanda - Content Editor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #1e3a8a;
+            font-size: 24px;
+        }
+
+        .logout-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .logout-btn:hover {
+            background: #b91c1c;
+        }
+
+        .login-screen {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: 100px auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-screen h2 {
+            color: #1e3a8a;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="url"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        button {
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #1e40af;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            background: white;
+            padding: 12px 24px;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .tab.active {
+            background: white;
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+
+        .tab-content {
+            background: white;
+            padding: 30px;
+            border-radius: 0 10px 10px 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .news-list {
+            margin-top: 20px;
+        }
+
+        .news-item {
+            border: 1px solid #e5e7eb;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .news-item h3 {
+            color: #1e3a8a;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .news-item p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .news-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+            width: auto;
+        }
+
+        .btn-edit {
+            background: #2563eb;
+        }
+
+        .btn-delete {
+            background: #dc2626;
+        }
+
+        .image-preview {
+            margin-top: 10px;
+            max-width: 200px;
+            height: auto;
+            border-radius: 5px;
+            border: 1px solid #d1d5db;
+        }
+
+        .settings-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .settings-item {
+            padding: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 5px;
+        }
+
+        .settings-item h3 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #dc2626;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <h2>🎓 NVTI Kanda Editor</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <div id="loginError" class="alert alert-error hidden" style="margin-top: 20px;"></div>
+    </div>
+
+    <!-- Main Editor (Hidden until login) -->
+    <div id="mainEditor" class="container hidden">
+        <div class="header">
+            <h1>🎓 NVTI Kanda Content Editor</h1>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+
+        <div id="alertContainer"></div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('news')">News Posts</button>
+            <button class="tab" onclick="switchTab('settings')">Website Images</button>
+        </div>
+
+        <!-- News Tab -->
+        <div id="newsTab" class="tab-content active">
+            <h2 style="margin-bottom: 20px; color: #1e3a8a;">Manage News Posts</h2>
+            
+            <form id="newsForm">
+                <input type="hidden" id="newsId">
+                <div class="form-group">
+                    <label for="newsTitle">Title</label>
+                    <input type="text" id="newsTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="newsExcerpt">Short Description</label>
+                    <textarea id="newsExcerpt" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="newsContent">Full Content</label>
+                    <textarea id="newsContent" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="newsCategory">Category</label>
+                    <select id="newsCategory" required>
+                        <option value="announcement">Announcement</option>
+                        <option value="event">Event</option>
+                        <option value="achievement">Achievement</option>
+                        <option value="news">News</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="newsFeaturedImage">Featured Image URL (optional)</label>
+                    <input type="url" id="newsFeaturedImage">
+                </div>
+                <div class="form-group">
+                    <label for="newsStatus">Status</label>
+                    <select id="newsStatus" required>
+                        <option value="published">Published</option>
+                        <option value="draft">Draft</option>
+                    </select>
+                </div>
+                <button type="submit" id="newsSubmitBtn">Add News Post</button>
+                <button type="button" id="newsCancelBtn" class="hidden" onclick="cancelNewsEdit()" style="margin-top: 10px; background: #6b7280;">Cancel</button>
+            </form>
+
+            <div class="news-list" id="newsList">
+                <div class="loading">Loading news posts...</div>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="settingsTab" class="tab-content">
+            <h2 style="margin-bottom: 20px; color: #1e3a8a;">Website Images</h2>
+            <p style="color: #6b7280; margin-bottom: 30px;">Update the images that appear on your website homepage</p>
+
+            <form id="settingsForm">
+                <div class="settings-grid">
+                    <div class="settings-item">
+                        <h3>Hero Banner Background</h3>
+                        <p style="color: #6b7280; font-size: 14px; margin-bottom: 10px;">Main background image at the top of homepage</p>
+                        <input type="url" id="heroBannerImage" placeholder="Enter image URL">
+                        <img id="previewHeroBanner" class="image-preview hidden">
+                    </div>
+
+                    <div class="settings-item">
+                        <h3>About Section Image</h3>
+                        <p style="color: #6b7280; font-size: 14px; margin-bottom: 10px;">Image in the About Us section</p>
+                        <input type="url" id="aboutSectionImage" placeholder="Enter image URL">
+                        <img id="previewAbout" class="image-preview hidden">
+                    </div>
+
+                    <div class="settings-item">
+                        <h3>Gallery Image 1</h3>
+                        <input type="url" id="galleryImage1" placeholder="Enter image URL">
+                        <img id="previewGallery1" class="image-preview hidden">
+                    </div>
+
+                    <div class="settings-item">
+                        <h3>Gallery Image 2</h3>
+                        <input type="url" id="galleryImage2" placeholder="Enter image URL">
+                        <img id="previewGallery2" class="image-preview hidden">
+                    </div>
+
+                    <div class="settings-item">
+                        <h3>Gallery Image 3</h3>
+                        <input type="url" id="galleryImage3" placeholder="Enter image URL">
+                        <img id="previewGallery3" class="image-preview hidden">
+                    </div>
+
+                    <div class="settings-item">
+                        <h3>Gallery Image 4</h3>
+                        <input type="url" id="galleryImage4" placeholder="Enter image URL">
+                        <img id="previewGallery4" class="image-preview hidden">
+                    </div>
+
+                    <div class="settings-item">
+                        <h3>Gallery Image 5</h3>
+                        <input type="url" id="galleryImage5" placeholder="Enter image URL">
+                        <img id="previewGallery5" class="image-preview hidden">
+                    </div>
+
+                    <div class="settings-item">
+                        <h3>Gallery Image 6</h3>
+                        <input type="url" id="galleryImage6" placeholder="Enter image URL">
+                        <img id="previewGallery6" class="image-preview hidden">
+                    </div>
+                </div>
+
+                <button type="submit" style="margin-top: 30px;">Save All Images</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let isLoggedIn = false;
+        let currentNews = [];
+
+        // Check if already logged in
+        if (localStorage.getItem('editorLoggedIn') === 'true') {
+            showEditor();
+            loadData();
+        }
+
+        // Login Form
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    localStorage.setItem('editorLoggedIn', 'true');
+                    showEditor();
+                    loadData();
+                } else {
+                    showError('loginError', 'Invalid username or password');
+                }
+            } catch (error) {
+                showError('loginError', 'Login failed. Please try again.');
+            }
+        });
+
+        function showEditor() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('mainEditor').classList.remove('hidden');
+            isLoggedIn = true;
+        }
+
+        function logout() {
+            localStorage.removeItem('editorLoggedIn');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('mainEditor').classList.add('hidden');
+            isLoggedIn = false;
+        }
+
+        function switchTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tab + 'Tab').classList.add('active');
+
+            if (tab === 'settings') {
+                loadSettings();
+            }
+        }
+
+        async function loadData() {
+            await loadNews();
+            await loadSettings();
+        }
+
+        async function loadNews() {
+            try {
+                const response = await fetch('/api/news/all');
+                currentNews = await response.json();
+                displayNews();
+            } catch (error) {
+                showAlert('Failed to load news posts', 'error');
+            }
+        }
+
+        function displayNews() {
+            const newsList = document.getElementById('newsList');
+            
+            if (currentNews.length === 0) {
+                newsList.innerHTML = '<p style="color: #6b7280; text-align: center; padding: 40px;">No news posts yet</p>';
+                return;
+            }
+
+            newsList.innerHTML = currentNews.map(news => `
+                <div class="news-item">
+                    <div>
+                        <h3>${news.title}</h3>
+                        <p>${news.excerpt}</p>
+                        <p style="font-size: 12px; margin-top: 5px;">
+                            <strong>Status:</strong> ${news.status} | 
+                            <strong>Category:</strong> ${news.category}
+                        </p>
+                    </div>
+                    <div class="news-actions">
+                        <button class="btn-small btn-edit" onclick="editNews('${news.id}')">Edit</button>
+                        <button class="btn-small btn-delete" onclick="deleteNews('${news.id}')">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // News Form Submit
+        document.getElementById('newsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const newsId = document.getElementById('newsId').value;
+            const newsData = {
+                title: document.getElementById('newsTitle').value,
+                excerpt: document.getElementById('newsExcerpt').value,
+                content: document.getElementById('newsContent').value,
+                category: document.getElementById('newsCategory').value,
+                featuredImage: document.getElementById('newsFeaturedImage').value || null,
+                status: document.getElementById('newsStatus').value,
+                date: new Date().toISOString(),
+                author: 'Admin'
+            };
+
+            try {
+                let response;
+                if (newsId) {
+                    // Update existing
+                    response = await fetch(`/api/news/${newsId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newsData)
+                    });
+                } else {
+                    // Create new
+                    response = await fetch('/api/news', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newsData)
+                    });
+                }
+
+                if (response.ok) {
+                    showAlert(newsId ? 'News post updated!' : 'News post created!', 'success');
+                    document.getElementById('newsForm').reset();
+                    document.getElementById('newsId').value = '';
+                    document.getElementById('newsSubmitBtn').textContent = 'Add News Post';
+                    document.getElementById('newsCancelBtn').classList.add('hidden');
+                    await loadNews();
+                } else {
+                    showAlert('Failed to save news post', 'error');
+                }
+            } catch (error) {
+                showAlert('Error saving news post', 'error');
+            }
+        });
+
+        function editNews(id) {
+            const news = currentNews.find(n => n.id === id);
+            if (!news) return;
+
+            document.getElementById('newsId').value = news.id;
+            document.getElementById('newsTitle').value = news.title;
+            document.getElementById('newsExcerpt').value = news.excerpt;
+            document.getElementById('newsContent').value = news.content;
+            document.getElementById('newsCategory').value = news.category;
+            document.getElementById('newsFeaturedImage').value = news.featuredImage || '';
+            document.getElementById('newsStatus').value = news.status;
+            document.getElementById('newsSubmitBtn').textContent = 'Update News Post';
+            document.getElementById('newsCancelBtn').classList.remove('hidden');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function cancelNewsEdit() {
+            document.getElementById('newsForm').reset();
+            document.getElementById('newsId').value = '';
+            document.getElementById('newsSubmitBtn').textContent = 'Add News Post';
+            document.getElementById('newsCancelBtn').classList.add('hidden');
+        }
+
+        async function deleteNews(id) {
+            if (!confirm('Are you sure you want to delete this news post?')) return;
+
+            try {
+                const response = await fetch(`/api/news/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showAlert('News post deleted!', 'success');
+                    await loadNews();
+                } else {
+                    showAlert('Failed to delete news post', 'error');
+                }
+            } catch (error) {
+                showAlert('Error deleting news post', 'error');
+            }
+        }
+
+        async function loadSettings() {
+            try {
+                const response = await fetch('/api/settings');
+                const settings = await response.json();
+
+                if (settings) {
+                    const fields = ['heroBannerImage', 'aboutSectionImage', 'galleryImage1', 'galleryImage2', 'galleryImage3', 'galleryImage4', 'galleryImage5', 'galleryImage6'];
+                    
+                    fields.forEach(field => {
+                        const input = document.getElementById(field);
+                        const preview = document.getElementById('preview' + field.charAt(0).toUpperCase() + field.slice(1).replace(/Image\d?/, ''));
+                        
+                        if (settings[field]) {
+                            input.value = settings[field];
+                            if (preview) {
+                                preview.src = settings[field];
+                                preview.classList.remove('hidden');
+                            }
+                        }
+                    });
+                }
+
+                // Add preview on input
+                document.querySelectorAll('#settingsForm input[type="url"]').forEach(input => {
+                    input.addEventListener('input', (e) => {
+                        const previewId = 'preview' + e.target.id.charAt(0).toUpperCase() + e.target.id.slice(1).replace(/Image\d?/, '');
+                        const preview = document.getElementById(previewId);
+                        
+                        if (e.target.value && preview) {
+                            preview.src = e.target.value;
+                            preview.classList.remove('hidden');
+                        } else if (preview) {
+                            preview.classList.add('hidden');
+                        }
+                    });
+                });
+            } catch (error) {
+                showAlert('Failed to load settings', 'error');
+            }
+        }
+
+        // Settings Form Submit
+        document.getElementById('settingsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const settingsData = {
+                heroBannerImage: document.getElementById('heroBannerImage').value || null,
+                aboutSectionImage: document.getElementById('aboutSectionImage').value || null,
+                galleryImage1: document.getElementById('galleryImage1').value || null,
+                galleryImage2: document.getElementById('galleryImage2').value || null,
+                galleryImage3: document.getElementById('galleryImage3').value || null,
+                galleryImage4: document.getElementById('galleryImage4').value || null,
+                galleryImage5: document.getElementById('galleryImage5').value || null,
+                galleryImage6: document.getElementById('galleryImage6').value || null,
+            };
+
+            try {
+                const response = await fetch('/api/settings', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(settingsData)
+                });
+
+                if (response.ok) {
+                    showAlert('Website images updated successfully!', 'success');
+                } else {
+                    showAlert('Failed to update images', 'error');
+                }
+            } catch (error) {
+                showAlert('Error updating images', 'error');
+            }
+        });
+
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alertContainer.appendChild(alert);
+
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+            
+            setTimeout(() => {
+                errorElement.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
