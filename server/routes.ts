@@ -32,6 +32,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.post("/api/change-password", async (req, res) => {
+    try {
+      const { username, oldPassword, newPassword } = req.body;
+
+      if (!username || !oldPassword || !newPassword) {
+        return res.status(400).json({ success: false, error: "Missing required fields" });
+      }
+
+      // Verify old password
+      const user = await storage.getUserByUsername(username);
+      
+      if (!user || user.password !== oldPassword) {
+        return res.status(401).json({ success: false, error: "Invalid current password" });
+      }
+
+      // Update password
+      const success = await storage.updateUserPassword(username, newPassword);
+
+      if (success) {
+        res.json({ success: true, message: "Password updated successfully" });
+      } else {
+        res.status(500).json({ success: false, error: "Failed to update password" });
+      }
+    } catch (error) {
+      res.status(500).json({ success: false, error: "Password change failed" });
+    }
+  });
+
   app.post("/api/auth/login", async (req, res) => {
     try {
       const { username, password } = req.body;

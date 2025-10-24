@@ -24,6 +24,7 @@ export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUserPassword(username: string, newPassword: string): Promise<boolean>;
 
   // News posts methods
   getAllNewsPosts(): Promise<NewsPost[]>;
@@ -136,6 +137,15 @@ export class MemStorage implements IStorage {
     const user: User = { ...insertUser, id };
     this.users.set(id, user);
     return user;
+  }
+
+  async updateUserPassword(username: string, newPassword: string): Promise<boolean> {
+    const user = await this.getUserByUsername(username);
+    if (!user) return false;
+    
+    user.password = newPassword;
+    this.users.set(user.id, user);
+    return true;
   }
 
   // News posts methods
@@ -251,6 +261,14 @@ export class DatabaseStorage implements IStorage {
       .values(insertUser)
       .returning();
     return user;
+  }
+
+  async updateUserPassword(username: string, newPassword: string): Promise<boolean> {
+    const result = await db
+      .update(users)
+      .set({ password: newPassword })
+      .where(eq(users.username, username));
+    return result.rowCount !== null && result.rowCount > 0;
   }
 
   // News posts methods

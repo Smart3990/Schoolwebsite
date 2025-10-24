@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { SiteSettings, Media } from "@shared/schema";
-import { Save, ImageIcon, Loader2, ExternalLink } from "lucide-react";
+import { Save, ImageIcon, Loader2, ExternalLink, KeyRound } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -33,6 +33,9 @@ export default function Settings() {
   const { toast } = useToast();
   const [selectedField, setSelectedField] = useState<ImageField | null>(null);
   const [imageUrl, setImageUrl] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   // Fetch site settings
   const { data: settings, isLoading } = useQuery<SiteSettings>({
@@ -65,6 +68,73 @@ export default function Settings() {
       });
     },
   });
+
+  // Password change mutation
+  const changePasswordMutation = useMutation({
+    mutationFn: async (data: { username: string; oldPassword: string; newPassword: string }) => {
+      const response = await apiRequest("POST", "/api/change-password", data);
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to update password");
+      }
+      
+      if (!result.success) {
+        throw new Error(result.error || "Failed to update password");
+      }
+      
+      return result;
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Password Updated",
+        description: "Your password has been changed successfully.",
+      });
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update password. Please check your current password.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handlePasswordChange = () => {
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      toast({
+        title: "Missing Fields",
+        description: "Please fill in all password fields.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast({
+        title: "Passwords Don't Match",
+        description: "New password and confirm password must match.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      toast({
+        title: "Password Too Short",
+        description: "Password must be at least 6 characters long.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const userJson = localStorage.getItem("dashboard_user");
+    const username = userJson ? JSON.parse(userJson).username : "admin";
+    changePasswordMutation.mutate({ username, oldPassword, newPassword });
+  };
 
   const handleImageSelect = (url: string) => {
     if (selectedField) {
@@ -278,6 +348,68 @@ export default function Settings() {
                 </div>
               </div>
             ))}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <KeyRound className="h-5 w-5" />
+              Change Password
+            </CardTitle>
+            <CardDescription>
+              Update your admin account password for better security
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="oldPassword">Current Password</Label>
+              <Input
+                id="oldPassword"
+                type="password"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+                placeholder="Enter current password"
+                data-testid="input-old-password"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="newPassword">New Password</Label>
+              <Input
+                id="newPassword"
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Enter new password (min 6 characters)"
+                data-testid="input-new-password"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirm New Password</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Re-enter new password"
+                data-testid="input-confirm-password"
+              />
+            </div>
+            <Button
+              onClick={handlePasswordChange}
+              disabled={changePasswordMutation.isPending}
+              className="hover-elevate"
+              data-testid="button-change-password"
+            >
+              {changePasswordMutation.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                "Update Password"
+              )}
+            </Button>
           </CardContent>
         </Card>
 

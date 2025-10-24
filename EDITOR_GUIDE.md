@@ -56,6 +56,23 @@ The Content Editor is a **standalone HTML page** that lets you update your websi
 - Your own images: Upload to Google Drive, Dropbox, or any image hosting service and copy the direct link
 - Make sure the URL ends with `.jpg`, `.png`, or `.webp`
 
+### 3️⃣ Change Your Password
+
+For security, you can update your admin password:
+
+1. Go to the "Website Images" tab
+2. Scroll down to the "Change Password" section
+3. Fill in:
+   - **Current Password** - Your existing password
+   - **New Password** - Your new password (minimum 6 characters)
+   - **Confirm New Password** - Re-enter your new password
+4. Click "Update Password"
+
+**Important:**
+- Make sure to remember your new password
+- The password must be at least 6 characters long
+- Both new password fields must match
+
 ## 💡 Tips
 
 1. **Save Often**: Changes are saved immediately to the database
