@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { SiteSettings, Media } from "@shared/schema";
-import { Save, ImageIcon, Loader2, ExternalLink, KeyRound } from "lucide-react";
+import { Save, ImageIcon, Loader2, ExternalLink, KeyRound, Upload } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -18,6 +18,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ObjectUploader } from "@/components/ObjectUploader";
+import type { UploadResult } from "@uppy/core";
 
 type ImageField = 
   | "heroBannerImage"
@@ -36,6 +38,7 @@ export default function Settings() {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [currentUploadField, setCurrentUploadField] = useState<ImageField | null>(null);
 
   // Fetch site settings
   const { data: settings, isLoading } = useQuery<SiteSettings>({
@@ -151,6 +154,60 @@ export default function Settings() {
     }
   };
 
+  const handleGetUploadParams = async () => {
+    const response = await apiRequest("POST", "/api/objects/upload", {});
+    const data = await response.json();
+    return {
+      method: "PUT" as const,
+      url: data.uploadURL,
+    };
+  };
+
+  const handleUploadComplete = async (result: UploadResult<Record<string, unknown>, Record<string, unknown>>) => {
+    if (!currentUploadField) return;
+
+    if (!result.successful || result.successful.length === 0) {
+      toast({
+        title: "Upload Error",
+        description: "No files were uploaded successfully",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const uploadedFile = result.successful[0];
+    if (!uploadedFile || !uploadedFile.uploadURL) {
+      toast({
+        title: "Upload Error",
+        description: "Failed to get uploaded file URL",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const response = await apiRequest("POST", "/api/images/upload-complete", {
+        imageURL: uploadedFile.uploadURL,
+        fieldName: currentUploadField,
+      });
+      const data = await response.json();
+
+      updateMutation.mutate({ [currentUploadField]: data.objectPath });
+      setCurrentUploadField(null);
+
+      toast({
+        title: "Upload Success",
+        description: "Image uploaded and saved successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Upload Error",
+        description: "Failed to complete upload process",
+        variant: "destructive",
+      });
+    }
+  };
+
   const imageFields: { field: ImageField; label: string; description: string }[] = [
     {
       field: "heroBannerImage",
@@ -232,26 +289,39 @@ export default function Settings() {
                     <Label className="text-base font-semibold">{label}</Label>
                     <p className="text-sm text-muted-foreground mt-1">{description}</p>
                   </div>
-                  <Dialog
-                    open={selectedField === field}
-                    onOpenChange={(open) => {
-                      if (!open) {
-                        setSelectedField(null);
-                        setImageUrl("");
-                      }
-                    }}
-                  >
-                    <DialogTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setSelectedField(field)}
-                        className="hover-elevate"
-                        data-testid={`button-change-${field}`}
-                      >
-                        Change Image
-                      </Button>
-                    </DialogTrigger>
+                  <div className="flex gap-2">
+                    <ObjectUploader
+                      maxNumberOfFiles={1}
+                      maxFileSize={10485760}
+                      onGetUploadParameters={handleGetUploadParams}
+                      onComplete={handleUploadComplete}
+                      buttonClassName="hover-elevate"
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      Upload
+                    </ObjectUploader>
+                    <Dialog
+                      open={selectedField === field}
+                      onOpenChange={(open) => {
+                        if (!open) {
+                          setSelectedField(null);
+                          setImageUrl("");
+                        } else {
+                          setCurrentUploadField(field);
+                        }
+                      }}
+                    >
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setSelectedField(field)}
+                          className="hover-elevate"
+                          data-testid={`button-change-${field}`}
+                        >
+                          Or Browse
+                        </Button>
+                      </DialogTrigger>
                     <DialogContent className="max-w-3xl">
                       <DialogHeader>
                         <DialogTitle>Select Image for {label}</DialogTitle>
@@ -320,7 +390,8 @@ export default function Settings() {
                         </div>
                       </div>
                     </DialogContent>
-                  </Dialog>
+                    </Dialog>
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-3">
