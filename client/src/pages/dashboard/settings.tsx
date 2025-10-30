@@ -18,8 +18,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ObjectUploader } from "@/components/ObjectUploader";
-import type { UploadResult } from "@uppy/core";
 
 type ImageField = 
   | "heroBannerImage"
@@ -154,57 +152,19 @@ export default function Settings() {
     }
   };
 
-  const handleGetUploadParams = async () => {
-    const response = await apiRequest("POST", "/api/objects/upload", {});
-    const data = await response.json();
-    return {
-      method: "PUT" as const,
-      url: data.uploadURL,
-    };
-  };
-
-  const handleUploadComplete = async (result: UploadResult<Record<string, unknown>, Record<string, unknown>>) => {
-    if (!currentUploadField) return;
-
-    if (!result.successful || result.successful.length === 0) {
-      toast({
-        title: "Upload Error",
-        description: "No files were uploaded successfully",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const uploadedFile = result.successful[0];
-    if (!uploadedFile || !uploadedFile.uploadURL) {
-      toast({
-        title: "Upload Error",
-        description: "Failed to get uploaded file URL",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      const response = await apiRequest("POST", "/api/images/upload-complete", {
-        imageURL: uploadedFile.uploadURL,
-        fieldName: currentUploadField,
-      });
-      const data = await response.json();
-
-      updateMutation.mutate({ [currentUploadField]: data.objectPath });
-      setCurrentUploadField(null);
-
-      toast({
-        title: "Upload Success",
-        description: "Image uploaded and saved successfully",
-      });
-    } catch (error) {
-      toast({
-        title: "Upload Error",
-        description: "Failed to complete upload process",
-        variant: "destructive",
-      });
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, field: ImageField) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        updateMutation.mutate({ [field]: base64 });
+        toast({
+          title: "Image Uploaded",
+          description: "Your image has been saved successfully.",
+        });
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -290,24 +250,33 @@ export default function Settings() {
                     <p className="text-sm text-muted-foreground mt-1">{description}</p>
                   </div>
                   <div className="flex gap-2">
-                    <ObjectUploader
-                      maxNumberOfFiles={1}
-                      maxFileSize={10485760}
-                      onGetUploadParameters={handleGetUploadParams}
-                      onComplete={handleUploadComplete}
-                      buttonClassName="hover-elevate"
-                    >
-                      <Upload className="h-4 w-4 mr-2" />
-                      Upload
-                    </ObjectUploader>
+                    <label htmlFor={`upload-${field}`}>
+                      <Button
+                        variant="default"
+                        size="sm"
+                        className="hover-elevate"
+                        data-testid={`button-upload-${field}`}
+                        asChild
+                      >
+                        <span>
+                          <Upload className="h-4 w-4 mr-2" />
+                          Upload
+                        </span>
+                      </Button>
+                      <input
+                        id={`upload-${field}`}
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => handleFileUpload(e, field)}
+                      />
+                    </label>
                     <Dialog
                       open={selectedField === field}
                       onOpenChange={(open) => {
                         if (!open) {
                           setSelectedField(null);
                           setImageUrl("");
-                        } else {
-                          setCurrentUploadField(field);
                         }
                       }}
                     >
