@@ -5,7 +5,6 @@ import { insertNewsPostSchema, insertMediaSchema, insertContactSubmissionSchema,
 import { z } from "zod";
 import path from "path";
 import { fileURLToPath } from "url";
-import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -256,56 +255,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Object storage endpoints
-  app.post("/api/objects/upload", async (req, res) => {
-    try {
-      const objectStorageService = new ObjectStorageService();
-      const uploadURL = await objectStorageService.getObjectEntityUploadURL();
-      res.json({ uploadURL });
-    } catch (error: any) {
-      console.error("Error getting upload URL:", error);
-      res.status(500).json({ error: error.message || "Failed to get upload URL" });
-    }
-  });
-
-  app.post("/api/images/upload-complete", async (req, res) => {
-    try {
-      if (!req.body.imageURL || !req.body.fieldName) {
-        return res.status(400).json({ error: "imageURL and fieldName are required" });
-      }
-
-      const objectStorageService = new ObjectStorageService();
-      const objectPath = await objectStorageService.trySetObjectEntityAclPolicy(
-        req.body.imageURL,
-        {
-          owner: "admin",
-          visibility: "public",
-        }
-      );
-
-      res.status(200).json({
-        objectPath: objectPath,
-        fieldName: req.body.fieldName,
-      });
-    } catch (error) {
-      console.error("Error completing image upload:", error);
-      res.status(500).json({ error: "Failed to complete upload" });
-    }
-  });
-
-  app.get("/objects/:objectPath(*)", async (req, res) => {
-    const objectStorageService = new ObjectStorageService();
-    try {
-      const objectFile = await objectStorageService.getObjectEntityFile(req.path);
-      objectStorageService.downloadObject(objectFile, res);
-    } catch (error) {
-      console.error("Error accessing object:", error);
-      if (error instanceof ObjectNotFoundError) {
-        return res.sendStatus(404);
-      }
-      return res.sendStatus(500);
-    }
-  });
 
   const httpServer = createServer(app);
   return httpServer;
