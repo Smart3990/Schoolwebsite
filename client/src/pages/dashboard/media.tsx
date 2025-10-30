@@ -29,11 +29,11 @@ export default function MediaLibrary() {
         uploadDate: new Date().toISOString(),
       });
     },
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["/api/media"] });
       toast({
-        title: "Media Uploaded",
-        description: "File has been uploaded successfully",
+        title: "✓ Media Uploaded Successfully",
+        description: `${variables.filename} is now in your library and ready to use`,
       });
     },
     onError: () => {

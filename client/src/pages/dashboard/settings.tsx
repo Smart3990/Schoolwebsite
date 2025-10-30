@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { SiteSettings, Media } from "@shared/schema";
@@ -363,26 +364,59 @@ export default function Settings() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <div className="relative w-48 h-32 rounded border overflow-hidden bg-muted">
-                    <img
-                      src={settings?.[field] || ""}
-                      alt={`Preview of ${label}`}
-                      className="w-full h-full object-cover"
-                      data-testid={`preview-${field}`}
-                    />
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="relative w-48 h-32 rounded-lg border-2 overflow-hidden bg-muted shadow-sm">
+                      {settings?.[field] ? (
+                        <img
+                          src={settings[field]}
+                          alt={`Preview of ${label}`}
+                          className="w-full h-full object-cover"
+                          data-testid={`preview-${field}`}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                          <ImageIcon className="h-8 w-8 opacity-20" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 space-y-1">
+                      {settings?.[field] ? (
+                        <>
+                          <div className="flex items-center gap-2">
+                            <Badge variant="default" className="bg-green-500">
+                              ✓ Uploaded
+                            </Badge>
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            Image is set and will display on your website
+                          </p>
+                          <a
+                            href={settings[field]!}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs hover:text-primary inline-flex items-center gap-1 text-muted-foreground"
+                          >
+                            View full size
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                        </>
+                      ) : (
+                        <div className="text-sm text-muted-foreground">
+                          <p>No image uploaded yet</p>
+                          <p className="text-xs mt-1">Click "Upload" to add an image</p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                   {settings?.[field] && (
-                    <div className="flex-1 text-sm text-muted-foreground break-all">
-                      <a
-                        href={settings[field]!}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hover:text-primary inline-flex items-center gap-1"
-                      >
-                        {settings[field]!.substring(0, 60)}...
-                        <ExternalLink className="h-3 w-3" />
-                      </a>
+                    <div className="bg-muted/50 rounded-lg p-3 border">
+                      <p className="text-xs font-medium mb-1">Website Display Preview:</p>
+                      <p className="text-xs text-muted-foreground">
+                        {field === "heroBannerImage" && "→ This appears as the main background on your homepage hero section"}
+                        {field === "aboutSectionImage" && "→ This appears in the About Us section of your homepage"}
+                        {field.startsWith("galleryImage") && `→ This appears in the facilities gallery (position ${field.replace("galleryImage", "")})`}
+                      </p>
                     </div>
                   )}
                 </div>

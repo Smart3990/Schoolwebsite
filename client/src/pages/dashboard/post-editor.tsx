@@ -336,6 +336,53 @@ export default function PostEditor() {
 
             <Card>
               <CardHeader>
+                <CardTitle>Website Preview</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="border rounded-lg overflow-hidden bg-card">
+                  {featuredImage && (
+                    <div className="aspect-video overflow-hidden bg-muted">
+                      <img
+                        src={featuredImage}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+                  <div className="p-4 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="text-xs">
+                        {category}
+                      </Badge>
+                      {status === "published" && (
+                        <Badge className="bg-green-500 text-xs">Published</Badge>
+                      )}
+                    </div>
+                    <h3 className="font-bold text-sm line-clamp-2">
+                      {title || "Your post title will appear here"}
+                    </h3>
+                    <p className="text-xs text-muted-foreground line-clamp-2">
+                      {excerpt || content.substring(0, 100) || "Your post excerpt will appear here..."}
+                    </p>
+                    <div className="flex items-center justify-between text-xs text-muted-foreground pt-2">
+                      <div className="flex items-center gap-1">
+                        <span>Admin</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Calendar className="h-3 w-3" />
+                        <span>{new Date().toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground mt-3 text-center">
+                  ↑ This is how your post will appear on the News page
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
                 <CardTitle>SEO Preview</CardTitle>
               </CardHeader>
               <CardContent>
