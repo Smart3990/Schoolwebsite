@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { DashboardLayout } from "@/components/dashboard-layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { SiteSettings, Media } from "@shared/schema";
-import { Save, ImageIcon, Loader2, ExternalLink, KeyRound, Upload } from "lucide-react";
+import { Save, ImageIcon, Loader2, ExternalLink, KeyRound, Upload, Phone, Mail, MapPin } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -38,11 +38,23 @@ export default function Settings() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [currentUploadField, setCurrentUploadField] = useState<ImageField | null>(null);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [location, setLocation] = useState("");
 
   // Fetch site settings
   const { data: settings, isLoading } = useQuery<SiteSettings>({
     queryKey: ["/api/settings"],
   });
+
+  // Update contact info state when settings are loaded
+  useEffect(() => {
+    if (settings) {
+      setPhoneNumber(settings.phoneNumber || "");
+      setEmail(settings.email || "");
+      setLocation(settings.location || "");
+    }
+  }, [settings]);
 
   // Fetch media library
   const { data: mediaItems = [] } = useQuery<Media[]>({
@@ -70,6 +82,14 @@ export default function Settings() {
       });
     },
   });
+
+  const handleContactInfoUpdate = () => {
+    updateMutation.mutate({
+      phoneNumber,
+      email,
+      location,
+    });
+  };
 
   // Password change mutation
   const changePasswordMutation = useMutation({
@@ -422,6 +442,92 @@ export default function Settings() {
                 </div>
               </div>
             ))}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Phone className="h-5 w-5" />
+              Contact Information
+            </CardTitle>
+            <CardDescription>
+              Update your institute's contact details displayed on the website
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="phoneNumber" className="flex items-center gap-2">
+                <Phone className="h-4 w-4" />
+                Phone Number
+              </Label>
+              <Input
+                id="phoneNumber"
+                type="tel"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                placeholder="e.g., +250 788 123 456"
+                data-testid="input-phone-number"
+              />
+              <p className="text-xs text-muted-foreground">
+                This will be displayed in the contact section of your website
+              </p>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="email" className="flex items-center gap-2">
+                <Mail className="h-4 w-4" />
+                Email Address
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="e.g., info@nvtikanda.edu"
+                data-testid="input-email"
+              />
+              <p className="text-xs text-muted-foreground">
+                Primary email address for inquiries
+              </p>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="location" className="flex items-center gap-2">
+                <MapPin className="h-4 w-4" />
+                Location
+              </Label>
+              <Input
+                id="location"
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="e.g., Kanda Sector, Bugesera District, Rwanda"
+                data-testid="input-location"
+              />
+              <p className="text-xs text-muted-foreground">
+                Physical address of your institute
+              </p>
+            </div>
+
+            <Button
+              onClick={handleContactInfoUpdate}
+              disabled={updateMutation.isPending}
+              className="hover-elevate w-full sm:w-auto"
+              data-testid="button-save-contact-info"
+            >
+              {updateMutation.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="mr-2 h-4 w-4" />
+                  Save Contact Information
+                </>
+              )}
+            </Button>
           </CardContent>
         </Card>
 

@@ -83,6 +83,9 @@ export const siteSettings = pgTable("site_settings", {
   galleryImage4: text("gallery_image_4"),
   galleryImage5: text("gallery_image_5"),
   galleryImage6: text("gallery_image_6"),
+  phoneNumber: text("phone_number"),
+  email: text("email"),
+  location: text("location"),
   updatedAt: text("updated_at").notNull(),
 });
 
