@@ -974,7 +974,9 @@ export default function Home() {
                     </div>
                     <div>
                       <h3 className="font-semibold mb-1">Location</h3>
-                      <p className="text-muted-foreground">Kanda, Accra, Ghana</p>
+                      <p className="text-muted-foreground">
+                        {siteSettings?.location || "Kanda, Accra, Ghana"}
+                      </p>
                     </div>
                   </div>
 
@@ -984,7 +986,9 @@ export default function Home() {
                     </div>
                     <div>
                       <h3 className="font-semibold mb-1">Email</h3>
-                      <p className="text-muted-foreground">info@nvtikanda.edu.gh</p>
+                      <p className="text-muted-foreground">
+                        {siteSettings?.email || "info@nvtikanda.edu.gh"}
+                      </p>
                     </div>
                   </div>
 
@@ -994,7 +998,9 @@ export default function Home() {
                     </div>
                     <div>
                       <h3 className="font-semibold mb-1">Phone</h3>
-                      <p className="text-muted-foreground">+233 XX XXX XXXX</p>
+                      <p className="text-muted-foreground">
+                        {siteSettings?.phoneNumber || "+233 XX XXX XXXX"}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
